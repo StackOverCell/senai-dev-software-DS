@@ -1,0 +1,207 @@
+/* ===== LAYOUT GERAL ===== */
+.gestao-produtos-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 0 15px;
+}
+
+.card {
+  background: #ffffff;
+  border: 2px solid #4a90a4;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.titulo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icone,
+.icone-gear {
+  font-size: 28px;
+}
+
+.secao {
+  margin-bottom: 25px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 6px;
+}
+
+.subtitulo {
+  font-size: 16px;
+  font-weight: 600;
+  color: #34495e;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icone-checkbox,
+.icone-box {
+  font-size: 18px;
+}
+
+/* ===== FORMULÁRIO ===== */
+.form-produto {
+  width: 100%;
+}
+
+.form-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.input-nome {
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.input-preco {
+  width: 150px;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.input-estoque {
+  width: 100px;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.btn-cadastrar {
+  padding: 10px 25px;
+  background: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.btn-cadastrar:hover:not(:disabled) {
+  background: #1a252f;
+}
+
+.btn-cadastrar:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+}
+
+.erro {
+  color: #e74c3c;
+  font-size: 14px;
+  margin: 10px 0 0 0;
+}
+
+/* ===== TABELA DE PRODUTOS (AGORA COM 4 COLUNAS) ===== */
+.tabela-cabecalho {
+  display: grid;
+  grid-template-columns: 1fr 100px 150px 110px;
+  padding: 10px 15px;
+  background: #e9ecef;
+  font-weight: bold;
+  font-size: 14px;
+  color: #34495e;
+  border-radius: 4px 4px 0 0;
+}
+
+.tabela-cabecalho span:nth-child(2) { text-align: center; }
+.tabela-cabecalho span:nth-child(3) { text-align: right; }
+.tabela-cabecalho span:nth-child(4) { text-align: center; }
+
+.lista-produtos {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: white;
+  border-radius: 0 0 4px 4px;
+  overflow: hidden;
+}
+
+.item-produto {
+  display: grid;
+  grid-template-columns: 1fr 100px 150px 110px;
+  align-items: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #ecf0f1;
+  transition: background 0.2s;
+}
+
+.item-produto:hover {
+  background: #f8f9fa;
+}
+
+.item-produto:last-child {
+  border-bottom: none;
+}
+
+.nome-produto {
+  font-size: 15px;
+  color: #2c3e50;
+}
+
+.estoque-produto {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: #27ae60;
+}
+
+.estoque-zero {
+  color: #e74c3c;
+}
+
+.preco-produto {
+  text-align: right;
+  font-size: 15px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+/* ===== BOTÃO EXCLUIR ===== */
+.btn-excluir {
+  justify-self: center;
+  padding: 6px 12px;
+  background: transparent;
+  color: #e74c3c;
+  border: 1px solid #e74c3c;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-excluir:hover {
+  background: #e74c3c;
+  color: white;
+}
+
+/* ===== MENSAGENS ===== */
+.carregando,
+.sem-produtos {
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 14px;
+  padding: 20px;
+}
