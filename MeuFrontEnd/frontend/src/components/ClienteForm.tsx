@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { clienteService } from '../services/ClienteService'
 import { type Cliente } from '../types/Cliente'
 
@@ -15,14 +15,17 @@ function ClienteForm({ onClienteCriado, clienteEditando, onCancelarEdicao }: Pro
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
 
-  // Preenche o formulário quando entra em modo edição
-  useState(() => {
+  useEffect(() => {
     if (clienteEditando) {
-      setNome(clienteEditando.nome)
-      setEmail(clienteEditando.email)
-      setCpf(clienteEditando.cpf)
+      setNome(clienteEditando.Nome)
+      setEmail(clienteEditando.Email)
+      setCpf(clienteEditando.Cpf)
+    } else {
+      setNome('')
+      setEmail('')
+      setCpf('')
     }
-  })
+  }, [clienteEditando])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -34,16 +37,17 @@ function ClienteForm({ onClienteCriado, clienteEditando, onCancelarEdicao }: Pro
     }
 
     const dados = {
-      nome: nome.trim(),
-      email: email.trim(),
-      cpf: cpf.trim()
+      Nome: nome.trim(),
+      Email: email.trim(),
+      Cpf: cpf.trim(),
+      Ativo: true  // ✅ Importante!
     }
 
     try {
       setLoading(true)
 
       if (clienteEditando) {
-        await clienteService.atualizar(clienteEditando.id, dados)
+        await clienteService.atualizar(clienteEditando.Id, dados)
       } else {
         await clienteService.criar(dados)
       }

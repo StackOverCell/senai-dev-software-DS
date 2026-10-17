@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useState, useEffect, type FormEvent } from 'react'
 import { produtoService } from '../services/ProdutoService'
 import { type Produto } from '../types/Produto'
 
@@ -15,14 +15,18 @@ function ProdutoForm({ onProdutoCriado, produtoEditando, onCancelarEdicao }: Pro
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
 
-  // Quando o produtoEditando mudar, preenche o formulário
-  useState(() => {
+  // ✅ CORREÇÃO: Usar useEffect para preencher o formulário quando clicar em editar
+  useEffect(() => {
     if (produtoEditando) {
-      setNome(produtoEditando.nome)
-      setPreco(String(produtoEditando.preco))
-      setEstoque(String(produtoEditando.estoque))
+      setNome(produtoEditando.Nome)
+      setPreco(String(produtoEditando.Preco))
+      setEstoque(String(produtoEditando.Estoque))
+    } else {
+      setNome('')
+      setPreco('')
+      setEstoque('')
     }
-  })
+  }, [produtoEditando])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -34,24 +38,21 @@ function ProdutoForm({ onProdutoCriado, produtoEditando, onCancelarEdicao }: Pro
     }
 
     const dados = {
-      nome: nome.trim(),
-      preco: Number(preco.replace(',', '.')),
-      estoque: estoque === '' ? 0 : Number(estoque),
-      ativo: true
+      Nome: nome.trim(),
+      Preco: Number(preco.replace(',', '.')),
+      Estoque: estoque === '' ? 0 : Number(estoque),
+      Ativo: true
     }
 
     try {
       setLoading(true)
 
       if (produtoEditando) {
-        // Modo edição
-        await produtoService.atualizar(produtoEditando.id, dados)
+        await produtoService.atualizar(produtoEditando.Id, dados)
       } else {
-        // Modo criação
         await produtoService.criar(dados)
       }
 
-      // Limpa tudo
       setNome('')
       setPreco('')
       setEstoque('')

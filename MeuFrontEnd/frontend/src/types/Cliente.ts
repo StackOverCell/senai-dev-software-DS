@@ -1,8 +1,9 @@
 export interface Cliente {
-  id: number
-  nome: string
-  email: string
-  cpf: string
+  Id: number
+  Nome: string
+  Email: string
+  Cpf: string
+  Ativo: boolean
 }
 
-export type NovoCliente = Omit<Cliente, 'id'>
+export type NovoCliente = Omit<Cliente, 'Id'>

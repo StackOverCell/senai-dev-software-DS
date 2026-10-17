@@ -5,7 +5,7 @@
   --bg-secao: #f8f9fa;
   --bg-sidebar: #1f3b57;
   --bg-sidebar-hover: rgba(255, 255, 255, 0.08);
-  --bg-sidebar-ativa: rgba(255, 255, 255, 0.12);
+  --bg-sidebar-ativa: rgba(74, 144, 164, 0.2);
   --bg-tabela-header: #e9ecef;
   --bg-input: #ffffff;
   --text-principal: #2c3e50;
@@ -205,7 +205,8 @@ body {
 }
 
 /* ========== FORMULÁRIOS ========== */
-.form-produto {
+.form-produto,
+.form-venda {
   width: 100%;
 }
 
@@ -216,7 +217,15 @@ body {
   align-items: center;
 }
 
-.form-group input {
+.form-venda .form-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr 120px auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.form-group input,
+.form-venda select {
   padding: 10px 15px;
   border: 1px solid var(--borda);
   border-radius: 4px;
@@ -226,14 +235,15 @@ body {
   transition: all 0.2s ease;
 }
 
-.form-group input::placeholder {
-  color: var(--text-muted);
-}
-
-.form-group input:focus {
+.form-group input:focus,
+.form-venda select:focus {
   outline: none;
   border-color: var(--cor-primaria);
   box-shadow: 0 0 0 3px rgba(74, 144, 164, 0.15);
+}
+
+.form-group input::placeholder {
+  color: var(--text-muted);
 }
 
 .input-nome { flex: 1; min-width: 200px; }
@@ -241,6 +251,15 @@ body {
 .input-estoque { width: 100px; }
 .input-email { width: 220px; }
 .input-cpf { width: 150px; }
+
+.form-venda select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 35px;
+}
 
 /* ========== BOTÕES ========== */
 .btn-cadastrar,
@@ -300,7 +319,22 @@ body {
 .erro {
   color: var(--cor-perigo);
   font-size: 14px;
-  margin: 10px 0 0 0;
+  margin: 12px 0 0 0;
+  padding: 10px 15px;
+  background: rgba(231, 76, 60, 0.1);
+  border-left: 3px solid var(--cor-perigo);
+  border-radius: 4px;
+}
+
+.sucesso {
+  color: var(--cor-sucesso);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 12px 0 0 0;
+  padding: 10px 15px;
+  background: rgba(39, 174, 96, 0.1);
+  border-left: 3px solid var(--cor-sucesso);
+  border-radius: 4px;
 }
 
 /* ========== TABELAS ========== */
@@ -327,6 +361,33 @@ body {
 
 .tabela-clientes .tabela-cabecalho span:nth-child(3) {
   text-align: center;
+}
+
+/* ✅ AQUI ESTÁ A CORREÇÃO DA TABELA DE VENDAS */
+.tabela-vendas .tabela-cabecalho {
+  grid-template-columns: 150px 1.2fr 1.2fr 80px 150px;
+}
+
+.tabela-vendas .item-produto {
+  grid-template-columns: 150px 1.2fr 1.2fr 80px 150px;
+}
+
+.tabela-vendas .tabela-cabecalho span:nth-child(2),
+.tabela-vendas .tabela-cabecalho span:nth-child(3) {
+  text-align: center;
+}
+
+.tabela-vendas .tabela-cabecalho span:nth-child(4) {
+  text-align: center;
+}
+
+.tabela-vendas .tabela-cabecalho span:nth-child(5) {
+  text-align: right;
+  padding-right: 10px;
+}
+
+.tabela-vendas .item-produto .nome-produto {
+  text-align: center; /* Centraliza o texto do cliente e produto */
 }
 
 .lista-produtos {
@@ -382,6 +443,10 @@ body {
   transition: color 0.3s ease;
 }
 
+.tabela-vendas .preco-produto {
+  color: var(--cor-sucesso);
+}
+
 .email-cliente {
   font-size: 14px;
   color: var(--text-muted);
@@ -391,6 +456,24 @@ body {
   text-align: center;
   font-size: 14px;
   color: var(--text-principal);
+}
+
+.data-venda {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.qtd-venda {
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: var(--text-principal);
+  background: var(--bg-secao);
+  padding: 4px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  justify-self: center;
 }
 
 /* ========== BOTÕES DE AÇÃO ========== */
@@ -451,4 +534,67 @@ body {
   color: var(--text-muted);
   font-size: 14px;
   padding: 20px;
+}
+
+/* ========== RESPONSIVO ========== */
+@media (max-width: 768px) {
+  .form-venda .form-group {
+    grid-template-columns: 1fr;
+  }
+  
+  .tabela-vendas .tabela-cabecalho,
+  .tabela-vendas .item-produto {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+/* Tabela de Fornecedores (5 colunas) */
+.tabela-fornecedores .tabela-cabecalho,
+.tabela-fornecedores .item-produto {
+  grid-template-columns: 1.3fr 1fr 1.3fr 1fr 140px;
+  align-items: center;
+}
+
+.tabela-fornecedores .tabela-cabecalho span:nth-child(1) {
+  text-align: left;
+}
+
+.tabela-fornecedores .tabela-cabecalho span:nth-child(2),
+.tabela-fornecedores .tabela-cabecalho span:nth-child(4) {
+  text-align: center;
+}
+
+.tabela-fornecedores .tabela-cabecalho span:nth-child(3) {
+  text-align: left;
+}
+
+.tabela-fornecedores .tabela-cabecalho span:nth-child(5) {
+  text-align: center;
+}
+
+.tabela-fornecedores .item-produto .nome-produto {
+  text-align: left;
+}
+
+.tabela-fornecedores .item-produto .cpf-cliente {
+  text-align: center;
+}
+
+.tabela-fornecedores .item-produto .email-cliente {
+  text-align: left;
+}
+
+/* Botões de ação mais compactos */
+.tabela-fornecedores .acoes-produto {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.tabela-fornecedores .btn-editar,
+.tabela-fornecedores .btn-excluir {
+  padding: 6px 10px;
+  font-size: 12px;
+  min-width: 70px;
 }

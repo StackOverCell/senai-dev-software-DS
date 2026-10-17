@@ -28,15 +28,16 @@ function ClienteList({ clientes, loading, onExcluir, onEditar }: Props) {
 
       <ul className="lista-produtos">
         {clientes.map(c => (
-          <li key={c.id} className="item-produto">
-            <span className="nome-produto">{c.nome}</span>
-            <span className="email-cliente">{c.email}</span>
-            <span className="cpf-cliente">{formatarCpf(c.cpf)}</span>
+          <li key={c.Id} className="item-produto">
+            <span className="nome-produto">{c.Nome}</span>
+            <span className="email-cliente">{c.Email}</span>
+            <span className="cpf-cliente">{formatarCpf(c.Cpf)}</span>
             <div className="acoes-produto">
+              {/* ✅ AQUI ESTÁ O LÁPIS IGUAL NO PRODUTO */}
               <button className="btn-editar" onClick={() => onEditar(c)}>
                 ✏️ Editar
               </button>
-              <button className="btn-excluir" onClick={() => onExcluir(c.id)}>
+              <button className="btn-excluir" onClick={() => onExcluir(c.Id)}>
                 🗑️ Excluir
               </button>
             </div>

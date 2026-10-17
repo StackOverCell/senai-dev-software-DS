@@ -1,35 +1,32 @@
 import { NavLink } from 'react-router-dom'
 
-const getLinkStyle = ({ isActive }: { isActive: boolean }) => ({
-  display: 'block',
-  padding: '12px 20px',
-  color: isActive ? '#c8d400' : 'white',
-  fontWeight: isActive ? 700 : 400,
-  background: isActive ? 'rgba(255,255,255,.12)' : 'transparent',
-  borderLeft: isActive ? '4px solid #c8d400' : '4px solid transparent'
-})
+interface Props {
+  tema: 'light' | 'dark'
+  alternarTema: () => void
+}
 
-function Sidebar() {
+function Sidebar({ tema, alternarTema }: Props) {
   return (
-    <nav
-      style={{
-        width: '210px',
-        background: '#1a3d5c',
-        minHeight: '100vh',
-        padding: '24px 0',
-        flexShrink: 0
-      }}
-    >
-      <div>MinhaApp</div>
+    <aside className="sidebar">
+      <h1 className="sidebar-titulo">Controle de Estoque</h1>
+      <nav className="sidebar-nav">
+        <NavLink to="/produtos" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
+          📦 Produtos
+        </NavLink>
+        <NavLink to="/clientes" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
+          👥 Clientes
+        </NavLink>
+        <NavLink to="/vendas" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
+          💰 Vendas
+        </NavLink>
+      </nav>
 
-      <NavLink to="/produtos" style={getLinkStyle}>
-        📦 Produtos
-      </NavLink>
-
-      <NavLink to="/clientes" style={getLinkStyle}>
-        👤 Clientes
-      </NavLink>
-    </nav>
+      <div className="theme-toggle">
+        <button className="btn-theme" onClick={alternarTema}>
+          {tema === 'light' ? '🌙 Modo Escuro' : '☀️ Modo Claro'}
+        </button>
+      </div>
+    </aside>
   )
 }
 

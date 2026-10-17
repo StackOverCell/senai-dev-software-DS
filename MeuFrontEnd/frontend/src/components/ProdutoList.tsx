@@ -27,25 +27,26 @@ function ProdutoList({ produtos, loading, onExcluir, onEditar }: Props) {
 
       <ul className="lista-produtos">
         {produtos.map(p => (
-          <li key={p.id} className="item-produto">
-            <span className="nome-produto">{p.nome}</span>
-            <span className={`estoque-produto ${p.estoque === 0 ? 'estoque-zero' : ''}`}>
-              {p.estoque}
+          <li key={p.Id} className="item-produto">
+            {/* ✅ NOMES COM MAIÚSCULA AQUI */}
+            <span className="nome-produto">{p.Nome}</span>
+            <span className={`estoque-produto ${p.Estoque === 0 ? 'estoque-zero' : ''}`}>
+              {p.Estoque}
             </span>
             <span className="preco-produto">
               {new Intl.NumberFormat('pt-BR', {
                 style: 'currency',
                 currency: 'BRL'
-              }).format(p.preco)}
+              }).format(p.Preco)}
             </span>
             <div className="acoes-produto">
-          <button className="btn-editar" onClick={() => onEditar(p)}>
-          ✏️ Editar
-            </button>
-              <button className="btn-excluir" onClick={() => onExcluir(p.id)}>
-            🗑️ Excluir
-          </button>
-          </div>
+              <button className="btn-editar" onClick={() => onEditar(p)}>
+                ✏️ Editar
+              </button>
+              <button className="btn-excluir" onClick={() => onExcluir(p.Id)}>
+                🗑️ Excluir
+              </button>
+            </div>
           </li>
         ))}
       </ul>

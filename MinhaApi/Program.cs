@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using MinhaApi.Repositories;
 using MinhaApi.Services;
 
@@ -5,9 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
 
-// ✅ ADICIONAR ISSO:
+// ✅ CONFIGURAÇÃO JSON: mantém os nomes exatamente como estão no C#
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("PermitirFrontend", policy =>
@@ -37,7 +43,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// ✅ ADICIONAR ISSO (antes do MapControllers):
 app.UseCors("PermitirFrontend");
 
 app.MapControllers();

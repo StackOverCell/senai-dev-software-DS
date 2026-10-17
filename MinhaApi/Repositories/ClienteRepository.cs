@@ -1,20 +1,22 @@
 using MinhaApi.Models;
 using MinhaApi.Repositories;
 using MySqlConnector;
+
 public class ClienteRepository : IClienteRepository
 {
     private readonly string _connectionString;
 
-      public ClienteRepository(IConfiguration config) 
-      => _connectionString = config.GetConnectionString("DefaultConnection")!;
+    public ClienteRepository(IConfiguration config) 
+        => _connectionString = config.GetConnectionString("DefaultConnection")!;
 
-     public IEnumerable<Cliente> GetAll() 
-     {
+    public IEnumerable<Cliente> GetAll() 
+    {
         var lista = new List<Cliente>();
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        string sql = "SELECT id, nome, email, cpf, ativo FROM cliente";
+        // ✅ FILTRA APENAS CLIENTES ATIVOS
+        string sql = "SELECT id, nome, email, cpf, ativo FROM cliente WHERE ativo = true";
         using var cmd = new MySqlCommand(sql, conn);
         using var reader = cmd.ExecuteReader();
 
@@ -30,16 +32,16 @@ public class ClienteRepository : IClienteRepository
             });
         }
         return lista;
-     }
+    }
     
     public Cliente? GetById(int id)
     {
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        string sql = "SELECT id, nome, email, cpf, ativo FROM cliente WHERE id = @Id";
+        string sql = "SELECT id, nome, email, cpf, ativo FROM cliente WHERE id = @Id AND ativo = true";
         using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@Id",id);
+        cmd.Parameters.AddWithValue("@Id", id);
         using var reader = cmd.ExecuteReader();
 
         if (reader.Read()) 
@@ -62,8 +64,8 @@ public class ClienteRepository : IClienteRepository
         conn.Open();
 
         string sql = @"INSERT INTO cliente (nome, email, cpf, ativo) 
-                    VALUES (@Nome, @Email, @Cpf, @Ativo);
-                    SELECT LAST_INSERT_ID();";
+                      VALUES (@Nome, @Email, @Cpf, @Ativo);
+                      SELECT LAST_INSERT_ID();";
 
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@Nome", c.Nome);
@@ -80,7 +82,8 @@ public class ClienteRepository : IClienteRepository
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
         string sql = @"UPDATE cliente
-                     SET nome = @Nome, email = @Email, cpf = @Cpf, ativo = @Ativo WHERE id = @Id";
+                       SET nome = @Nome, email = @Email, cpf = @Cpf, ativo = @Ativo 
+                       WHERE id = @Id";
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@Id", c.Id);
         cmd.Parameters.AddWithValue("@Nome", c.Nome);
@@ -96,9 +99,7 @@ public class ClienteRepository : IClienteRepository
         conn.Open();
         string sql = "UPDATE cliente SET ativo = false WHERE id = @Id";
         using var cmd = new MySqlCommand(sql, conn);
-        cmd.Parameters.AddWithValue("@Ativo", false);
         cmd.Parameters.AddWithValue("@Id", id);
         cmd.ExecuteNonQuery();
     }
-
 }

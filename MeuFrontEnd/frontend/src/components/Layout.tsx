@@ -27,6 +27,13 @@ function Layout() {
           <NavLink to="/clientes" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
             👥 Clientes
           </NavLink>
+          {/* ✅ ADICIONE ESTA LINHA */}
+          <NavLink to="/vendas" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
+            💰 Vendas
+          </NavLink>
+          <NavLink to="/fornecedores" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
+            🏢 Fornecedores
+          </NavLink>
         </nav>
 
         <div className="theme-toggle">
