@@ -50,7 +50,7 @@ function FornecedorPage() {
     <div className="gestao-produtos-container">
       <div className="card">
         <h1 className="titulo">
-          <span className="icone">🏢</span>
+          <span className="icone">⚙️</span>
           Gestão de Fornecedores
         </h1>
 
@@ -68,7 +68,7 @@ function FornecedorPage() {
 
         <div className="secao">
           <h3 className="subtitulo">
-            <span className="icone">📦</span>
+            <span className="icone">🏢</span>
             Fornecedores Cadastrados
           </h3>
           {erro && <p className="erro">{erro}</p>}

@@ -1,11 +1,14 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useAuth } from '../context/AuthContext'
 
 function Layout() {
   const [tema, setTema] = useState<'light' | 'dark'>(() => {
     const salvo = localStorage.getItem('tema')
     return (salvo as 'light' | 'dark') || 'light'
   })
+  const { logout } = useAuth()
+  const navigate = useNavigate()
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', tema)
@@ -14,6 +17,11 @@ function Layout() {
 
   const alternarTema = () => {
     setTema(t => (t === 'light' ? 'dark' : 'light'))
+  }
+
+  const handleLogout = () => {
+    logout()
+    navigate('/login')
   }
 
   return (
@@ -27,7 +35,6 @@ function Layout() {
           <NavLink to="/clientes" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
             👥 Clientes
           </NavLink>
-          {/* ✅ ADICIONE ESTA LINHA */}
           <NavLink to="/vendas" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
             💰 Vendas
           </NavLink>
@@ -39,6 +46,9 @@ function Layout() {
         <div className="theme-toggle">
           <button className="btn-theme" onClick={alternarTema}>
             {tema === 'light' ? '🌙 Modo Escuro' : '☀️ Modo Claro'}
+          </button>
+          <button className="btn-logout" onClick={handleLogout}>
+            🚪 Sair
           </button>
         </div>
       </aside>
