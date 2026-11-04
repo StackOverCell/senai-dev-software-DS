@@ -11,16 +11,15 @@ function LoginPage() {
   const { login, isAuthenticated } = useAuth()
   const navigate = useNavigate()
 
-  // Já logado? Redireciona para produtos
-  if (isAuthenticated) return <Navigate to="/produtos" replace />
+  // ✅ MUDANÇA 1: Se já estiver logado, manda para a Dashboard
+  if (isAuthenticated) return <Navigate to="/dashboard" replace />
 
-  // ✅ NOVO: Limpa o erro após 3 segundos
+  // Limpa o erro após 3 segundos
   useEffect(() => {
     if (erro) {
       const timer = setTimeout(() => {
         setErro(null)
-      }, 3000) // 3000ms = 3 segundos
-
+      }, 3000)
       return () => clearTimeout(timer)
     }
   }, [erro])
@@ -33,7 +32,10 @@ function LoginPage() {
       setLoading(true)
       const resp = await authService.login({ email, senha })
       login(resp)
-      navigate('/produtos')
+      
+      // ✅ MUDANÇA 2: Após logar com sucesso, manda para a Dashboard
+      navigate('/dashboard')
+      
     } catch {
       setErro('E-mail ou senha incorretos.')
     } finally {

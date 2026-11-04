@@ -1,14 +1,20 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useNavigate, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 
 function Layout() {
+  const { isAuthenticated, logout } = useAuth()
+  const navigate = useNavigate()
+  
   const [tema, setTema] = useState<'light' | 'dark'>(() => {
     const salvo = localStorage.getItem('tema')
     return (salvo as 'light' | 'dark') || 'light'
   })
-  const { logout } = useAuth()
-  const navigate = useNavigate()
+
+  // 🛡️ GUARDA DE SEGURANÇA: Se não estiver logado, chuta para o login
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />
+  }
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', tema)
@@ -29,6 +35,9 @@ function Layout() {
       <aside className="sidebar">
         <h1 className="sidebar-titulo">Controle de Estoque</h1>
         <nav className="sidebar-nav">
+          <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
+            📊 Dashboard
+          </NavLink>
           <NavLink to="/produtos" className={({ isActive }) => `nav-link ${isActive ? 'ativa' : ''}`}>
             📦 Produtos
           </NavLink>

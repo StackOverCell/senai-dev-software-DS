@@ -40,7 +40,7 @@ function ClienteForm({ onClienteCriado, clienteEditando, onCancelarEdicao }: Pro
       Nome: nome.trim(),
       Email: email.trim(),
       Cpf: cpf.trim(),
-      Ativo: true  // ✅ Importante!
+      Ativo: true
     }
 
     try {

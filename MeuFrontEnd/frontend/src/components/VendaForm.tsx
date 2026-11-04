@@ -120,7 +120,7 @@ function VendaForm({ onVendaCriada }: Props) {
         />
 
         <button type="submit" disabled={carregandoVenda} className="btn-cadastrar">
-          {carregandoVenda ? '⏳ Processando...' : '💰 Registrar Venda'}
+          {carregandoVenda ? '⏳ Processando...' : 'Registrar Venda'}
         </button>
       </div>
 

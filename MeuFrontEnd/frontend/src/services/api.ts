@@ -1,20 +1,24 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://localhost:5255'
+  baseURL: 'http://localhost:5255' // Confirme se esta é a porta do seu backend
 })
 
-// ✅ Interceptor: adiciona o token em toda requisição
+// ✅ INTERCEPTOR DE REQUISIÇÃO
 api.interceptors.request.use((config) => {
   const saved = localStorage.getItem('auth')
   if (saved) {
-    const { token } = JSON.parse(saved)
-    config.headers.Authorization = `Bearer ${token}`
+    const user = JSON.parse(saved)
+    
+    // ✅ ATENÇÃO AQUI: 'Token' com T maiúsculo, igual ao seu C#!
+    if (user.Token) {
+      config.headers.Authorization = `Bearer ${user.Token}`
+    }
   }
   return config
 })
 
-// ✅ Se der 401 (token inválido/expirado), desloga
+// ✅ INTERCEPTOR DE RESPOSTA (Se der 401, desloga)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
