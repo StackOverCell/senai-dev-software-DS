@@ -89,6 +89,7 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
+builder.Services.AddScoped<IFotoService, FotoService>();
 
 var app = builder.Build();
 
@@ -98,10 +99,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("PermitirFrontend");
-
-app.UseAuthentication(); // 1º: Verifica se o token é válido
-app.UseAuthorization();  // 2º: Verifica se o usuário tem permissão
+// ✅ ORDEM CORRETA DOS MIDDLEWARES:
+app.UseCors("PermitirFrontend");     // 1º: Libera o CORS para o React
+app.UseStaticFiles();                // 2º: NOVO! Libera a pasta wwwroot para servir as imagens
+app.UseAuthentication();             // 3º: Verifica se o token JWT é válido
+app.UseAuthorization();              // 4º: Verifica se o usuário tem permissão
 
 app.MapControllers();
 app.Run();

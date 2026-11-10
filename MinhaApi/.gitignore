@@ -1,0 +1,15 @@
+# Ignorar pastas de build e dependências
+bin/
+obj/
+
+# Ignorar configurações de usuário
+.vscode/
+.idea/
+
+# Ignorar arquivos de log e temporários
+*.log
+*.tmp
+
+# Ignorar fotos de produtos (mas manter a estrutura da pasta)
+wwwroot/uploads/produtos/*
+!wwwroot/uploads/produtos/.gitkeep

@@ -1,20 +1,22 @@
 using MinhaApi.Models;
 using MinhaApi.Repositories;
 using MySqlConnector;
+
 public class ProdutoRepository : IProdutoRepository
 {
     private readonly string _connectionString;
 
-      public ProdutoRepository(IConfiguration config) 
-      => _connectionString = config.GetConnectionString("DefaultConnection")!;
+    public ProdutoRepository(IConfiguration config) 
+        => _connectionString = config.GetConnectionString("DefaultConnection")!;
 
-     public IEnumerable<Produto> GetAll() 
-     {
+    public IEnumerable<Produto> GetAll() 
+    {
         var lista = new List<Produto>();
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        string sql = "SELECT id, nome, preco, estoque, ativo FROM produtos";
+        // ✅ ALTERADO: Adicionado 'foto' no SELECT
+        string sql = "SELECT id, nome, preco, estoque, ativo, foto FROM produtos";
         using var cmd = new MySqlCommand(sql, conn);
         using var reader = cmd.ExecuteReader();
 
@@ -26,18 +28,21 @@ public class ProdutoRepository : IProdutoRepository
                 Nome = reader.GetString("nome"),
                 Preco = reader.GetDecimal("preco"),
                 Estoque = reader.GetInt32("estoque"),
-                Ativo = reader.GetBoolean("ativo")
+                Ativo = reader.GetBoolean("ativo"),
+                // ✅ NOVO: Trata NULL do banco para não dar erro
+                Foto = reader["foto"] == DBNull.Value ? null : reader.GetString("foto")
             });
         }
         return lista;
-     }
+    }
     
     public Produto? GetById(int id)
     {
         using var conn = new MySqlConnection(_connectionString);
         conn.Open();
 
-        string sql = "SELECT id, nome, preco, estoque, ativo FROM produtos WHERE id = @Id";
+        // ✅ ALTERADO: Adicionado 'foto' no SELECT
+        string sql = "SELECT id, nome, preco, estoque, ativo, foto FROM produtos WHERE id = @Id";
         using var cmd = new MySqlCommand(sql, conn);
         cmd.Parameters.AddWithValue("@Id", id);
         using var reader = cmd.ExecuteReader();
@@ -51,7 +56,9 @@ public class ProdutoRepository : IProdutoRepository
             Nome = reader.GetString("nome"),
             Preco = reader.GetDecimal("preco"),
             Estoque = reader.GetInt32("estoque"),
-            Ativo = reader.GetBoolean("ativo")
+            Ativo = reader.GetBoolean("ativo"),
+            // ✅ NOVO: Trata NULL do banco
+            Foto = reader["foto"] == DBNull.Value ? null : reader.GetString("foto")
         };
     }
 
@@ -114,4 +121,19 @@ public class ProdutoRepository : IProdutoRepository
         cmd.ExecuteNonQuery();
     }
 
+    // ✅ NOVO: Método para atualizar apenas a foto
+    public void AtualizarFoto(int id, string? nomeArquivo)
+    {
+        using var conn = new MySqlConnection(_connectionString);
+        conn.Open();
+        
+        string sql = "UPDATE produtos SET foto = @Foto WHERE id = @Id";
+        using var cmd = new MySqlCommand(sql, conn);
+        
+        // Truque importante: se nomeArquivo for null, enviamos DBNull.Value para o MySQL
+        cmd.Parameters.AddWithValue("@Foto", (object?)nomeArquivo ?? DBNull.Value);
+        cmd.Parameters.AddWithValue("@Id", id);
+        
+        cmd.ExecuteNonQuery();
+    }
 }
