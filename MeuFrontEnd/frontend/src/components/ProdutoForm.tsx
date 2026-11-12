@@ -1,30 +1,41 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import { produtoService } from '../services/ProdutoService'
 import { type Produto } from '../types/Produto'
+import FotoUpload from './produtos/FotoUpload' // ✅ NOVO: Import do componente
 
 interface Props {
   onProdutoCriado: () => void
   produtoEditando: Produto | null
   onCancelarEdicao: () => void
+  onFotoAtualizada?: (id: number, novaFoto: string | null) => void // ✅ NOVO
 }
 
-function ProdutoForm({ onProdutoCriado, produtoEditando, onCancelarEdicao }: Props) {
+function ProdutoForm({ 
+  onProdutoCriado, 
+  produtoEditando, 
+  onCancelarEdicao,
+  onFotoAtualizada // ✅ NOVO
+}: Props) {
   const [nome, setNome] = useState('')
   const [preco, setPreco] = useState('')
   const [estoque, setEstoque] = useState('')
   const [loading, setLoading] = useState(false)
   const [erro, setErro] = useState<string | null>(null)
+  
+  // ✅ NOVO: Estado local para a foto, sincronizado com o produto editando
+  const [fotoAtual, setFotoAtual] = useState<string | undefined>(undefined)
 
-  // ✅ CORREÇÃO: Usar useEffect para preencher o formulário quando clicar em editar
   useEffect(() => {
     if (produtoEditando) {
       setNome(produtoEditando.Nome)
       setPreco(String(produtoEditando.Preco))
       setEstoque(String(produtoEditando.Estoque))
+      setFotoAtual(produtoEditando.Foto) // ✅ Sincroniza a foto
     } else {
       setNome('')
       setPreco('')
       setEstoque('')
+      setFotoAtual(undefined) // ✅ Limpa a foto ao criar novo
     }
   }, [produtoEditando])
 
@@ -56,6 +67,7 @@ function ProdutoForm({ onProdutoCriado, produtoEditando, onCancelarEdicao }: Pro
       setNome('')
       setPreco('')
       setEstoque('')
+      setFotoAtual(undefined)
       onCancelarEdicao()
       onProdutoCriado()
     } catch {
@@ -69,8 +81,17 @@ function ProdutoForm({ onProdutoCriado, produtoEditando, onCancelarEdicao }: Pro
     setNome('')
     setPreco('')
     setEstoque('')
+    setFotoAtual(undefined)
     setErro(null)
     onCancelarEdicao()
+  }
+
+  // ✅ NOVO: Função chamada pelo FotoUpload quando a foto muda
+  const handleMudancaFoto = (novaFoto: string | null) => {
+    setFotoAtual(novaFoto || undefined)
+    if (onFotoAtualizada && produtoEditando) {
+      onFotoAtualizada(produtoEditando.Id, novaFoto)
+    }
   }
 
   return (
@@ -113,7 +134,17 @@ function ProdutoForm({ onProdutoCriado, produtoEditando, onCancelarEdicao }: Pro
           </button>
         )}
       </div>
+      
       {erro && <p className="erro">{erro}</p>}
+
+      {/* ✅ NOVO: Exibe o upload de foto APENAS no modo de edição */}
+      {produtoEditando && (
+        <FotoUpload
+          produtoId={produtoEditando.Id}
+          fotoAtual={fotoAtual || null}
+          onAtualizar={handleMudancaFoto}
+        />
+      )}
     </form>
   )
 }

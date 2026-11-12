@@ -25,7 +25,6 @@ function ProdutoPage() {
   const handleEditar = (produto: Produto) => {
     setProdutoEditando(produto)
     setErro(null)
-    // Rola a página para o topo (onde está o formulário)
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -33,11 +32,24 @@ function ProdutoPage() {
     setProdutoEditando(null)
   }
 
+  // ✅ NOVO: Função para atualizar a foto no estado local sem recarregar tudo
+  const handleFotoAtualizada = (id: number, novaFoto: string | null) => {
+    if (produtoEditando && produtoEditando.Id === id) {
+      setProdutoEditando({ ...produtoEditando, Foto: novaFoto || undefined })
+    }
+    // Opcional: recarrega a lista para garantir que está tudo sincronizado
+    carregarProdutos()
+  }
+
   const handleExcluir = async (id: number) => {
     if (!window.confirm('Tem certeza que deseja excluir este produto?')) return
     try {
       await produtoService.excluir(id)
       await carregarProdutos()
+      // Se o produto excluído era o que estava sendo editado, cancela a edição
+      if (produtoEditando?.Id === id) {
+        setProdutoEditando(null)
+      }
     } catch {
       setErro('Erro ao excluir o produto.')
     }
@@ -60,10 +72,13 @@ function ProdutoPage() {
             <span className="icone"></span>
             {produtoEditando ? 'Editando Produto' : 'Cadastrar Produto'}
           </h3>
+          
+          {/* ✅ NOVO: Passamos a função onFotoAtualizada para o Form */}
           <ProdutoForm
             onProdutoCriado={carregarProdutos}
             produtoEditando={produtoEditando}
             onCancelarEdicao={handleCancelarEdicao}
+            onFotoAtualizada={handleFotoAtualizada}
           />
         </div>
 

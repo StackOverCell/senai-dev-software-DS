@@ -20,3 +20,15 @@ export const formatarDataHora = (data: string): string => {
     minute: '2-digit'
   })
 }
+export const getFotoUrl = (foto?: string): string => {
+  if (!foto) return ''
+  
+  // Pega a URL base da API das variáveis de ambiente ou usa o padrão
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5255'
+  
+  // Remove '/api' se existir no final da URL base
+  const baseUrl = apiUrl.replace(/\/api$/, '')
+  
+  // Retorna a URL completa da imagem
+  return `${baseUrl}/uploads/produtos/${foto}`
+}

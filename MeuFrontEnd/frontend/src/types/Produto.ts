@@ -3,6 +3,8 @@ export interface Produto {
   Nome: string
   Preco: number
   Estoque: number
+  Foto?: string
   Ativo: boolean
 }
+
 export type NovoProduto = Omit<Produto, 'Id'>
